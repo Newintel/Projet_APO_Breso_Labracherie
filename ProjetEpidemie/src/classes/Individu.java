@@ -11,6 +11,7 @@ public abstract class Individu {
 	
 	public Individu(Case caseDepart, boolean dA) {
 		this.maCase = caseDepart;
+		this.maCase.addIndividu(this);
 		this.deplacementAutorise = dA;
 	}
 	
@@ -23,7 +24,9 @@ public abstract class Individu {
 	}
 	
 	public void seDeplacer(Case destination) {
+		maCase.retirerIndividu(this);
 		this.maCase = destination;
+		maCase.addIndividu(this);
 	}
 	
 }

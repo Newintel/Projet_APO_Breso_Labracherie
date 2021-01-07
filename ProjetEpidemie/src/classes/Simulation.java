@@ -1,6 +1,7 @@
 package classes;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 public class Simulation {
@@ -36,6 +37,73 @@ public class Simulation {
 		
 		directionIndividu = new Random();
 		
+	}
+	
+	public void run() {
+		// déplacer tous les individus
+		this.deplacer();
+		// faire le test de contamination
+	}
+	
+	public void deplacer() {
+		boolean deplacementImpossible = true;
+		for (Individu individu : lesIndividus) {
+			int xIndividu = individu.getMaCase().getX();
+			int yIndividu = individu.getMaCase().getY();
+			do {
+				int direction = directionIndividu.nextInt(3);
+				switch (direction) {
+					case 0:
+						// Ouest
+						if ( (yIndividu - 1) >= 0) {
+							System.out.println(individu.getMaCase().toString() + "ouest" + leMonde.getCase(xIndividu, yIndividu-1).toString() + "\n");
+							deplacementImpossible = false;
+							individu.seDeplacer(leMonde.getCase(xIndividu, yIndividu-1));
+						}
+						break;
+					case 1:
+						// Sud
+						if ( (xIndividu + 1) < leMonde.getLargeur()) {
+							System.out.println(individu.getMaCase().toString() + "sud" + leMonde.getCase(xIndividu+1, yIndividu).toString() + "\n");
+							deplacementImpossible = false;
+							individu.seDeplacer(leMonde.getCase(xIndividu+1, yIndividu));
+						}
+						break;
+					case 2:
+						// Est
+						if ( (yIndividu + 1) < leMonde.getLongueur()) {
+							System.out.println(individu.getMaCase().toString() + "est" + leMonde.getCase(xIndividu, yIndividu+1).toString() + "\n");
+							deplacementImpossible = false;
+							individu.seDeplacer(leMonde.getCase(xIndividu, yIndividu+1));
+						}
+						break;
+					case 3:
+						// Nord
+						if ( (xIndividu - 1) >= 0) {
+							System.out.println(individu.getMaCase().toString() + "nord" + leMonde.getCase(xIndividu-1, yIndividu).toString() + "\n");
+							deplacementImpossible = false;
+							individu.seDeplacer(leMonde.getCase(xIndividu-1, yIndividu));
+						}
+						break;			
+				}
+			} while (deplacementImpossible);
+					
+		}
+	}
+	
+	@Override
+	public String toString() {
+		String s = "";
+		int i = 0;
+		for (Case c : leMonde.getLesCases()) {
+			if (i%leMonde.getLongueur() == 0) {
+				s += "\n---------------------------------------------------------------------------------\n| ";
+			}
+			s += c.getMesIndividus().size() + " | ";
+			i++;
+		}
+		s += "\n---------------------------------------------------------------------------------\n";
+		return s;
 	}
 	
 }

@@ -7,7 +7,7 @@ public class Case {
 	private int x, y;
 	private ArrayList<Individu> mesIndividus;
 	
-	public Case(int x, int y) {
+	public Case(int y, int x) {
 		this.x = x;
 		this.y = y;
 		mesIndividus = new ArrayList<>();
@@ -31,5 +31,10 @@ public class Case {
 	
 	public boolean retirerIndividu(Individu individu) {
 		return mesIndividus.remove(individu);
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + y + ", " + x + ")";
 	}
 }
