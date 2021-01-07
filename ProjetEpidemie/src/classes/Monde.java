@@ -7,12 +7,12 @@ public class Monde {
 	private int largeur, longueur;
 	private ArrayList<Case> lesCases;
 	
-	public Monde(int largeur, int longueur) {
-		this.largeur = largeur;
+	public Monde(int longueur, int largeur) {
 		this.longueur = longueur;
+		this.largeur = largeur;
 		for (int i = 0; i < longueur; i++) {
 			for (int j = 0; j < largeur; j++) {
-				lesCases.add(new Case(j, i));
+				lesCases.add(new Case(i, j));
 			}
 		}
 	}
@@ -27,6 +27,10 @@ public class Monde {
 	
 	public ArrayList<Case> getLesCases() {
 		return lesCases;
+	}
+	
+	public Case getCase(int x, int y) {
+		return lesCases.get( (x*this.largeur) + y);
 	}
 	
 }
