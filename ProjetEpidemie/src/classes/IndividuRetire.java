@@ -1,5 +1,5 @@
 package classes;
-
+/*
 public abstract class IndividuRetire extends Individu {
 
 	public IndividuRetire(Case caseDepart) {
@@ -10,4 +10,4 @@ public abstract class IndividuRetire extends Individu {
 		super(caseDepart, dA);
 	}
 
-}
+}*/

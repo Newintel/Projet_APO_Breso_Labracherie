@@ -1,5 +1,5 @@
 package classes;
-
+/*
 public class IndividuSain extends Individu {
 
 	public IndividuSain(Case caseDepart) {
@@ -10,4 +10,4 @@ public class IndividuSain extends Individu {
 		super(caseDepart, dA);
 	}
 
-}
+}*/

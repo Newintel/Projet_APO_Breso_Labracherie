@@ -1,5 +1,5 @@
 package classes;
-
+/*
 public class IndividuDecede extends IndividuRetire{
 
 	public IndividuDecede(Case caseDepart) {
@@ -8,3 +8,4 @@ public class IndividuDecede extends IndividuRetire{
 	
 
 }
+*/

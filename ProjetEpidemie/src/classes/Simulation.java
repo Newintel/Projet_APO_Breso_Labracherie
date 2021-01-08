@@ -27,11 +27,11 @@ public class Simulation {
 		
 		Random rPlacement = new Random();
 		for (int i = 0; i < s0; i++) {
-			lesIndividus.add(new IndividuSain(leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
+			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
 		for (int i = 0; i < i0; i++) {
-			lesIndividus.add(new IndividuContamine(leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
+			lesIndividus.add(new Individu("contamine", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
 		directionIndividu = new Random();
@@ -39,7 +39,7 @@ public class Simulation {
 	}
 	
 	public void run() {
-		while (this.getNbContamines() == this.i0) {
+		while (this.getNbContamines() < this.p0) {
 			// déplacer tous les individus
 			this.deplacer();
 			System.out.println("déplacement");
@@ -108,7 +108,7 @@ public class Simulation {
 	public int getNbContamines() {
 		int n = 0;
 		for (Individu individu : lesIndividus) {
-			if (individu instanceof IndividuContamine) {
+			if (individu.getEtat().equals("contamine")) {
 				n++;
 			}
 		}

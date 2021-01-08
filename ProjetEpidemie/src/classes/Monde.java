@@ -39,17 +39,14 @@ public class Monde {
 		for (Case laCase : lesCases) {
 			ArrayList<Individu> individusCase = laCase.getMesIndividus();
 			if (individusCase.size() > 1) {
-				if (individusCase.stream().anyMatch(i -> i instanceof IndividuContamine) && individusCase.stream().anyMatch(i -> i instanceof IndividuSain)) {
-					ArrayList<IndividuSain> nouveauxContamines = new ArrayList<>();
+				if (individusCase.stream().anyMatch(i -> i.getEtat().equals("sain")) && individusCase.stream().anyMatch(i -> i.getEtat().equals("contamine"))) {
 					for (Individu individu : individusCase) {
-						for (int j = 0; j < laCase.getNbContamines() && individu instanceof IndividuSain; j++) {
+						for (int j = 0; j < laCase.getNbContamines() && individu.getEtat().equals("sain"); j++) {
 							if (new Random().nextInt((int) (1/tauxContamination)) == 0) {
-								System.out.println("Conta");
-								nouveauxContamines.add((IndividuSain) individu);
+								individu.setEtat("contamine");
 							}
 						}
 					}
-					laCase.remplacerIndividus(nouveauxContamines);
 				}
 			}
 		}

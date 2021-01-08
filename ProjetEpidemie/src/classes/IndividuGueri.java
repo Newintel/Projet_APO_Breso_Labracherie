@@ -1,5 +1,5 @@
 package classes;
-
+/*
 public class IndividuGueri extends IndividuRetire {
 
 	public IndividuGueri(Case caseDepart) {
@@ -11,3 +11,4 @@ public class IndividuGueri extends IndividuRetire {
 	}
 
 }
+*/
