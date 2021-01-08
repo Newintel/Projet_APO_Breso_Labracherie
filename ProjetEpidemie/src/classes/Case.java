@@ -33,6 +33,24 @@ public class Case {
 		return mesIndividus.remove(individu);
 	}
 	
+	public int getNbContamines() {
+		int n = 0;
+		for (Individu individu : mesIndividus) {
+			if (individu instanceof IndividuContamine) {
+				n++;
+			}
+		}
+		return n;
+	}
+	
+	public void remplacerIndividus(ArrayList<IndividuSain> nouveauxContamines) {
+		for (IndividuSain individu : nouveauxContamines) {
+			mesIndividus.remove(individu);
+			individu = null;
+			mesIndividus.add(new IndividuContamine(this));
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + y + ", " + x + ")";

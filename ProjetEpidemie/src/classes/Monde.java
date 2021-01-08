@@ -1,6 +1,7 @@
 package classes;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Monde {
 
@@ -32,6 +33,26 @@ public class Monde {
 	
 	public Case getCase(int y, int x) {
 		return lesCases.get( (y*this.longueur) + x);
+	}
+	
+	public void contaminer(float tauxContamination) {
+		for (Case laCase : lesCases) {
+			ArrayList<Individu> individusCase = laCase.getMesIndividus();
+			if (individusCase.size() > 1) {
+				if (individusCase.stream().anyMatch(i -> i instanceof IndividuContamine) && individusCase.stream().anyMatch(i -> i instanceof IndividuSain)) {
+					ArrayList<IndividuSain> nouveauxContamines = new ArrayList<>();
+					for (Individu individu : individusCase) {
+						for (int j = 0; j < laCase.getNbContamines() && individu instanceof IndividuSain; j++) {
+							if (new Random().nextInt((int) (1/tauxContamination)) == 0) {
+								System.out.println("Conta");
+								nouveauxContamines.add((IndividuSain) individu);
+							}
+						}
+					}
+					laCase.remplacerIndividus(nouveauxContamines);
+				}
+			}
+		}
 	}
 	
 }
