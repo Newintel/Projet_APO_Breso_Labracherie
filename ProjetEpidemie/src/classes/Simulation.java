@@ -6,21 +6,20 @@ import java.util.Random;
 public class Simulation {
 
 	private int s0, i0, p0;
-	private float tauxMortalite, tauxGuerison, tauxContamination;
+	private double tauxRetirement, tauxContamination;
 	private ArrayList<Individu> lesIndividus;
 	private Random directionIndividu;
 	private Monde leMonde;
 	
-	public Simulation(int i0, int p0, float tauxM, float tauxG, float tauxC) {
-		this(i0, p0, tauxM, tauxG, tauxC, 500, 500);
+	public Simulation(int i0, int p0, double tauxR, double tauxC) {
+		this(i0, p0, tauxR, tauxC, 500, 500);
 	}
 	
-	public Simulation(int i0, int p0, float tauxM, float tauxG, float tauxC, int longueur, int largeur) {
+	public Simulation(int i0, int p0, double tauxR, double tauxC, int longueur, int largeur) {
 		this.i0 = i0;
 		this.p0 = p0;
 		this.s0 = this.p0-this.i0;
-		this.tauxMortalite = tauxM;
-		this.tauxGuerison = tauxG;
+		this.tauxRetirement = tauxR;
 		this.tauxContamination = tauxC;
 		leMonde = new Monde(longueur, largeur);
 		lesIndividus = new ArrayList<>();
@@ -38,13 +37,14 @@ public class Simulation {
 		
 	}
 	
-	public void run() {
-		while (this.getNbContamines() < this.p0) {
+	public void SIR() {
+		while (this.getNbIndividus("retire") == 0) {
 			// déplacer tous les individus
 			this.deplacer();
 			System.out.println("déplacement");
 			// faire le test de contamination
 			leMonde.contaminer(this.tauxContamination);
+			this.retirer();
 		}
 	}
 	
@@ -54,7 +54,7 @@ public class Simulation {
 			int xIndividu = individu.getMaCase().getX();
 			int yIndividu = individu.getMaCase().getY();
 			do {
-				int direction = directionIndividu.nextInt(3);
+				int direction = directionIndividu.nextInt(4);
 				switch (direction) {
 					case 0:
 						// Ouest
@@ -83,10 +83,18 @@ public class Simulation {
 							deplacementImpossible = false;
 							individu.seDeplacer(leMonde.getCase(xIndividu-1, yIndividu));
 						}
-						break;			
+						break;
 				}
 			} while (deplacementImpossible);
 					
+		}
+	}
+	
+	public void retirer() {
+		for (Individu individu : lesIndividus) {
+			if (individu.getEtat().equals("contamine") && new Random().nextInt((int) (1/this.tauxRetirement)) == 0) {
+				individu.setEtat("retire");
+			}
 		}
 	}
 	
@@ -105,14 +113,14 @@ public class Simulation {
 		return s;
 	}
 	
-	public int getNbContamines() {
+	public int getNbIndividus(String etat) {
 		int n = 0;
 		for (Individu individu : lesIndividus) {
-			if (individu.getEtat().equals("contamine")) {
+			if (individu.getEtat().equals(etat)) {
 				n++;
 			}
 		}
 		return n;
 	}
-	
+
 }

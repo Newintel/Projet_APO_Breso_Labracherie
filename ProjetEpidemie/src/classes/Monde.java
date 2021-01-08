@@ -35,7 +35,7 @@ public class Monde {
 		return lesCases.get( (y*this.longueur) + x);
 	}
 	
-	public void contaminer(float tauxContamination) {
+	public void contaminer(double tauxContamination) {
 		for (Case laCase : lesCases) {
 			ArrayList<Individu> individusCase = laCase.getMesIndividus();
 			if (individusCase.size() > 1) {
