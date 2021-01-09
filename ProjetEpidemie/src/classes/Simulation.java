@@ -5,23 +5,25 @@ import java.util.Random;
 
 public class Simulation {
 
-	private int s0, i0, p0;
-	private double tauxRetirement, tauxContamination, tauxExposition;
+	private int s0, i0, p0, jours;
+	private double tauxRetirement, tauxContamination, tauxExposition, tauxNaissance;
 	private ArrayList<Individu> lesIndividus;
 	private Random directionIndividu;
 	private Monde leMonde;
 	
-	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE) {
-		this(i0, p0, tauxR, tauxC, tauxE, 500, 500);
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, double tauxN, int jours) {
+		this(i0, p0, tauxR, tauxC, tauxE, tauxN, jours, 500, 500);
 	}
 	
-	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, int longueur, int largeur) {
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, double tauxN, int jours, int longueur, int largeur) {
 		this.i0 = i0;
 		this.p0 = p0;
 		this.s0 = this.p0-this.i0;
 		this.tauxRetirement = tauxR;
 		this.tauxContamination = tauxC;
 		this.tauxExposition = tauxE;
+		this.tauxNaissance = tauxN;
+		this.jours = jours;
 		leMonde = new Monde(longueur, largeur);
 		lesIndividus = new ArrayList<>();
 		
@@ -39,7 +41,7 @@ public class Simulation {
 	}
 	
 	public void SIR() {
-		while (this.getNbIndividus("retire") == 0) {
+		for (int i = 0; i < jours; i++) {
 			// déplacer tous les individus
 			this.deplacer();
 			System.out.println("déplacement");
@@ -54,11 +56,7 @@ public class Simulation {
 	}
 	
 	public void SEIR() {
-		while (this.getNbIndividus("retire") == 0) {
-			// déplacer tous les individus
-			this.deplacer();
-			System.out.println("déplacement");
-			
+		for (int i = 0; i < jours; i++) {
 			// faire le test de retirement avant de faire le test de contamination
 			this.retirer();
 			
@@ -67,6 +65,30 @@ public class Simulation {
 			
 			// passer les individus sains à exposés
 			this.exposer();
+			
+			// déplacer tous les individus
+			this.deplacer();
+			System.out.println("déplacement");
+		}
+	}
+	
+	public void SEIRN() {
+		for (int i = 0; i < jours; i++) {
+			// faire le test de retirement avant de faire le test de contamination
+			this.retirer();
+			
+			// faire le test de contamination
+			leMonde.contaminer("expose", this.tauxContamination);
+			
+			// passer les individus sains à exposés
+			this.exposer();
+			
+			// déplacer tous les individus
+			this.deplacer();
+			System.out.println("déplacement");
+			
+			// naissance
+			this.naissance();
 		}
 	}
 	
@@ -116,7 +138,6 @@ public class Simulation {
 		for (Individu individu : lesIndividus) {
 			if (individu.getEtat().equals("contamine") && new Random().nextInt((int) (1/this.tauxRetirement)) == 0) {
 				individu.setEtat("retire");
-				System.out.println("retirement");
 			}
 		}
 	}
@@ -125,8 +146,15 @@ public class Simulation {
 		for (Individu individu : lesIndividus) {
 			if (individu.getEtat().equals("sain") && new Random().nextInt((int) (1/this.tauxExposition)) == 0) {
 				individu.setEtat("expose");
-				System.out.println("exposition");
 			}
+		}
+	}
+	
+	public void naissance() {
+		Random rPlacement = new Random();
+		if (new Random().nextInt((int) (1/this.tauxNaissance)) == 0) {
+			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(leMonde.getLongueur()), rPlacement.nextInt(leMonde.getLargeur()))));
+			System.out.println("naissance");
 		}
 	}
 	
