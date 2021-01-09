@@ -36,6 +36,8 @@ public class Simulation {
 			lesIndividus.add(new Individu("contamine", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
+		leMonde.creationZones();
+		
 		directionIndividu = new Random();
 		
 	}
