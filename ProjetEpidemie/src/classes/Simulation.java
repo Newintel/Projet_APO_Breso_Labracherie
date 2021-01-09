@@ -6,21 +6,22 @@ import java.util.Random;
 public class Simulation {
 
 	private int s0, i0, p0;
-	private double tauxRetirement, tauxContamination;
+	private double tauxRetirement, tauxContamination, tauxExposition;
 	private ArrayList<Individu> lesIndividus;
 	private Random directionIndividu;
 	private Monde leMonde;
 	
-	public Simulation(int i0, int p0, double tauxR, double tauxC) {
-		this(i0, p0, tauxR, tauxC, 500, 500);
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE) {
+		this(i0, p0, tauxR, tauxC, tauxE, 500, 500);
 	}
 	
-	public Simulation(int i0, int p0, double tauxR, double tauxC, int longueur, int largeur) {
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, int longueur, int largeur) {
 		this.i0 = i0;
 		this.p0 = p0;
 		this.s0 = this.p0-this.i0;
 		this.tauxRetirement = tauxR;
 		this.tauxContamination = tauxC;
+		this.tauxExposition = tauxE;
 		leMonde = new Monde(longueur, largeur);
 		lesIndividus = new ArrayList<>();
 		
@@ -42,9 +43,30 @@ public class Simulation {
 			// déplacer tous les individus
 			this.deplacer();
 			System.out.println("déplacement");
-			// faire le test de contamination
-			leMonde.contaminer(this.tauxContamination);
+			
+			// faire le test de retirement avant de faire le test de contamination
 			this.retirer();
+			
+			// faire le test de contamination
+			leMonde.contaminer("sain", this.tauxContamination);
+			
+		}
+	}
+	
+	public void SEIR() {
+		while (this.getNbIndividus("retire") == 0) {
+			// déplacer tous les individus
+			this.deplacer();
+			System.out.println("déplacement");
+			
+			// faire le test de retirement avant de faire le test de contamination
+			this.retirer();
+			
+			// faire le test de contamination
+			leMonde.contaminer("expose", this.tauxContamination);
+			
+			// passer les individus sains à exposés
+			this.exposer();
 		}
 	}
 	
@@ -94,6 +116,16 @@ public class Simulation {
 		for (Individu individu : lesIndividus) {
 			if (individu.getEtat().equals("contamine") && new Random().nextInt((int) (1/this.tauxRetirement)) == 0) {
 				individu.setEtat("retire");
+				System.out.println("retirement");
+			}
+		}
+	}
+	
+	public void exposer() {
+		for (Individu individu : lesIndividus) {
+			if (individu.getEtat().equals("sain") && new Random().nextInt((int) (1/this.tauxExposition)) == 0) {
+				individu.setEtat("expose");
+				System.out.println("exposition");
 			}
 		}
 	}

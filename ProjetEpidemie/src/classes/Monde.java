@@ -35,15 +35,16 @@ public class Monde {
 		return lesCases.get( (y*this.longueur) + x);
 	}
 	
-	public void contaminer(double tauxContamination) {
+	public void contaminer(String etatAContaminer, double tauxContamination) {
 		for (Case laCase : lesCases) {
 			ArrayList<Individu> individusCase = laCase.getMesIndividus();
 			if (individusCase.size() > 1) {
-				if (individusCase.stream().anyMatch(i -> i.getEtat().equals("sain")) && individusCase.stream().anyMatch(i -> i.getEtat().equals("contamine"))) {
+				if (individusCase.stream().anyMatch(i -> i.getEtat().equals(etatAContaminer)) && individusCase.stream().anyMatch(i -> i.getEtat().equals("contamine"))) {
 					for (Individu individu : individusCase) {
-						for (int j = 0; j < laCase.getNbContamines() && individu.getEtat().equals("sain"); j++) {
+						for (int j = 0; j < laCase.getNbContamines() && individu.getEtat().equals(etatAContaminer); j++) {
 							if (new Random().nextInt((int) (1/tauxContamination)) == 0) {
 								individu.setEtat("contamine");
+								System.out.println("contamination");
 							}
 						}
 					}
