@@ -36,19 +36,11 @@ public class Case {
 	public int getNbContamines() {
 		int n = 0;
 		for (Individu individu : mesIndividus) {
-			if (individu instanceof IndividuContamine) {
+			if (individu.getEtat().equals("contamine")) {
 				n++;
 			}
 		}
 		return n;
-	}
-	
-	public void remplacerIndividus(ArrayList<IndividuSain> nouveauxContamines) {
-		for (IndividuSain individu : nouveauxContamines) {
-			mesIndividus.remove(individu);
-			individu = null;
-			mesIndividus.add(new IndividuContamine(this));
-		}
 	}
 	
 	@Override

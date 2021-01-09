@@ -6,45 +6,67 @@ import java.util.Random;
 public class Simulation {
 
 	private int s0, i0, p0;
-	private float tauxMortalite, tauxGuerison, tauxContamination;
+	private double tauxRetirement, tauxContamination, tauxExposition;
 	private ArrayList<Individu> lesIndividus;
 	private Random directionIndividu;
 	private Monde leMonde;
 	
-	public Simulation(int i0, int p0, float tauxM, float tauxG, float tauxC) {
-		this(i0, p0, tauxM, tauxG, tauxC, 500, 500);
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE) {
+		this(i0, p0, tauxR, tauxC, tauxE, 500, 500);
 	}
 	
-	public Simulation(int i0, int p0, float tauxM, float tauxG, float tauxC, int longueur, int largeur) {
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, int longueur, int largeur) {
 		this.i0 = i0;
 		this.p0 = p0;
 		this.s0 = this.p0-this.i0;
-		this.tauxMortalite = tauxM;
-		this.tauxGuerison = tauxG;
+		this.tauxRetirement = tauxR;
 		this.tauxContamination = tauxC;
+		this.tauxExposition = tauxE;
 		leMonde = new Monde(longueur, largeur);
 		lesIndividus = new ArrayList<>();
 		
 		Random rPlacement = new Random();
 		for (int i = 0; i < s0; i++) {
-			lesIndividus.add(new IndividuSain(leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
+			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
 		for (int i = 0; i < i0; i++) {
-			lesIndividus.add(new IndividuContamine(leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
+			lesIndividus.add(new Individu("contamine", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
 		directionIndividu = new Random();
 		
 	}
 	
-	public void run() {
-		while (this.getNbContamines() == this.i0) {
+	public void SIR() {
+		while (this.getNbIndividus("retire") == 0) {
 			// déplacer tous les individus
 			this.deplacer();
 			System.out.println("déplacement");
+			
+			// faire le test de retirement avant de faire le test de contamination
+			this.retirer();
+			
 			// faire le test de contamination
-			leMonde.contaminer(this.tauxContamination);
+			leMonde.contaminer("sain", this.tauxContamination);
+			
+		}
+	}
+	
+	public void SEIR() {
+		while (this.getNbIndividus("retire") == 0) {
+			// déplacer tous les individus
+			this.deplacer();
+			System.out.println("déplacement");
+			
+			// faire le test de retirement avant de faire le test de contamination
+			this.retirer();
+			
+			// faire le test de contamination
+			leMonde.contaminer("expose", this.tauxContamination);
+			
+			// passer les individus sains à exposés
+			this.exposer();
 		}
 	}
 	
@@ -54,7 +76,7 @@ public class Simulation {
 			int xIndividu = individu.getMaCase().getX();
 			int yIndividu = individu.getMaCase().getY();
 			do {
-				int direction = directionIndividu.nextInt(3);
+				int direction = directionIndividu.nextInt(4);
 				switch (direction) {
 					case 0:
 						// Ouest
@@ -83,10 +105,28 @@ public class Simulation {
 							deplacementImpossible = false;
 							individu.seDeplacer(leMonde.getCase(xIndividu-1, yIndividu));
 						}
-						break;			
+						break;
 				}
 			} while (deplacementImpossible);
 					
+		}
+	}
+	
+	public void retirer() {
+		for (Individu individu : lesIndividus) {
+			if (individu.getEtat().equals("contamine") && new Random().nextInt((int) (1/this.tauxRetirement)) == 0) {
+				individu.setEtat("retire");
+				System.out.println("retirement");
+			}
+		}
+	}
+	
+	public void exposer() {
+		for (Individu individu : lesIndividus) {
+			if (individu.getEtat().equals("sain") && new Random().nextInt((int) (1/this.tauxExposition)) == 0) {
+				individu.setEtat("expose");
+				System.out.println("exposition");
+			}
 		}
 	}
 	
@@ -105,14 +145,14 @@ public class Simulation {
 		return s;
 	}
 	
-	public int getNbContamines() {
+	public int getNbIndividus(String etat) {
 		int n = 0;
 		for (Individu individu : lesIndividus) {
-			if (individu instanceof IndividuContamine) {
+			if (individu.getEtat().equals(etat)) {
 				n++;
 			}
 		}
 		return n;
 	}
-	
+
 }

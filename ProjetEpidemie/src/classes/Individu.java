@@ -1,15 +1,18 @@
 package classes;
 
-public abstract class Individu {
+public class Individu {
 
 	private Case maCase;
 	private boolean deplacementAutorise;
 	
-	public Individu(Case caseDepart) {
-		this(caseDepart, true);
+	private String etat;
+	
+	public Individu(String etat, Case caseDepart) {
+		this(etat, caseDepart, true);
 	}
 	
-	public Individu(Case caseDepart, boolean dA) {
+	public Individu(String etat, Case caseDepart, boolean dA) {
+		this.etat = etat;
 		this.maCase = caseDepart;
 		this.maCase.addIndividu(this);
 		this.deplacementAutorise = dA;
@@ -29,4 +32,11 @@ public abstract class Individu {
 		maCase.addIndividu(this);
 	}
 	
+	public void setEtat(String etat) {
+		this.etat = etat;
+	}
+	
+	public String getEtat() {
+		return etat;
+	}
 }
