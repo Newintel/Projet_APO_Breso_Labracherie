@@ -154,10 +154,10 @@ public class Simulation {
 	}
 	
 	public void naissance() {
-		Random rPlacement = new Random();
+		/*Random rPlacement = new Random();
 		if (new Random().nextInt((int) (1/this.tauxNaissance)) == 0) {
 			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(leMonde.getLongueur()), rPlacement.nextInt(leMonde.getLargeur()))));
-		}
+		}*/
 	}
 	
 	public void mortNaturelle() {
