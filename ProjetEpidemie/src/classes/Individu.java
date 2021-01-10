@@ -4,6 +4,7 @@ public class Individu {
 
 	private Case maCase;
 	private boolean deplacementAutorise;
+	private boolean masque = false;
 	
 	private Etat etat;
 	
@@ -22,8 +23,12 @@ public class Individu {
 		return maCase;
 	}
 	
-	public boolean isDeplacementAutorise() {
+	public boolean hasDeplacementAutorise() {
 		return deplacementAutorise;
+	}
+	
+	public void setDeplacement(boolean deplacement) {
+		this.deplacementAutorise = deplacement;
 	}
 	
 	public void seDeplacer(Case destination) {
@@ -38,5 +43,13 @@ public class Individu {
 	
 	public Etat getEtat() {
 		return etat;
+	}
+	
+	public void setMasque() {
+		masque = true;
+	}
+	
+	public boolean hasMasque() {
+		return masque;
 	}
 }
