@@ -6,16 +6,16 @@ import java.util.Random;
 public class Simulation {
 
 	private int s0, i0, p0, jours;
-	private double tauxRetirement, tauxContamination, tauxExposition, tauxNaissance;
+	private double tauxRetirement, tauxContamination, tauxExposition, tauxNaissance, tauxMort;
 	private ArrayList<Individu> lesIndividus;
 	private Random directionIndividu;
 	private Monde leMonde;
 	
-	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, double tauxN, int jours) {
-		this(i0, p0, tauxR, tauxC, tauxE, tauxN, jours, 500, 500);
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, double tauxN, double tauxM, int jours) {
+		this(i0, p0, tauxR, tauxC, tauxE, tauxN, tauxM, jours, 500, 500);
 	}
 	
-	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, double tauxN, int jours, int longueur, int largeur) {
+	public Simulation(int i0, int p0, double tauxR, double tauxC, double tauxE, double tauxN, double tauxM, int jours, int longueur, int largeur) {
 		this.i0 = i0;
 		this.p0 = p0;
 		this.s0 = this.p0-this.i0;
@@ -23,6 +23,7 @@ public class Simulation {
 		this.tauxContamination = tauxC;
 		this.tauxExposition = tauxE;
 		this.tauxNaissance = tauxN;
+		this.tauxMort = tauxM;
 		this.jours = jours;
 		leMonde = new Monde(longueur, largeur);
 		lesIndividus = new ArrayList<>();
@@ -36,6 +37,8 @@ public class Simulation {
 			lesIndividus.add(new Individu("contamine", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
+		leMonde.creationZones();
+		
 		directionIndividu = new Random();
 		
 	}
@@ -44,7 +47,6 @@ public class Simulation {
 		for (int i = 0; i < jours; i++) {
 			// déplacer tous les individus
 			this.deplacer();
-			System.out.println("déplacement");
 			
 			// faire le test de retirement avant de faire le test de contamination
 			this.retirer();
@@ -68,7 +70,6 @@ public class Simulation {
 			
 			// déplacer tous les individus
 			this.deplacer();
-			System.out.println("déplacement");
 		}
 	}
 	
@@ -85,7 +86,9 @@ public class Simulation {
 			
 			// déplacer tous les individus
 			this.deplacer();
-			System.out.println("déplacement");
+			
+			// mort natuelle
+			this.mortNaturelle();
 			
 			// naissance
 			this.naissance();
@@ -154,8 +157,11 @@ public class Simulation {
 		Random rPlacement = new Random();
 		if (new Random().nextInt((int) (1/this.tauxNaissance)) == 0) {
 			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(leMonde.getLongueur()), rPlacement.nextInt(leMonde.getLargeur()))));
-			System.out.println("naissance");
 		}
+	}
+	
+	public void mortNaturelle() {
+		/**/
 	}
 	
 	@Override
