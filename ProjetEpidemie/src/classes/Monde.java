@@ -70,7 +70,7 @@ public class Monde {
 					zone.addCase(this.getCase(j+1, i+1));
 				}
 				
-				zone.addIndividus();
+				lesZones.add(zone);
 			}
 		}
 	}
@@ -92,15 +92,14 @@ public class Monde {
 	}
 	
 	public void contaminer(String etatAContaminer, double tauxContamination) {
-		for (Case laCase : lesCases) {
-			ArrayList<Individu> individusCase = laCase.getMesIndividus();
-			if (individusCase.size() > 1) {
-				if (individusCase.stream().anyMatch(i -> i.getEtat().equals(etatAContaminer)) && individusCase.stream().anyMatch(i -> i.getEtat().equals("contamine"))) {
-					for (Individu individu : individusCase) {
-						for (int j = 0; j < laCase.getNbContamines() && individu.getEtat().equals(etatAContaminer); j++) {
+		for (Zone laZone : lesZones) {
+			ArrayList<Individu> individusZone = laZone.getMesIndividus();
+			if (individusZone.size() > 1) {
+				if (individusZone.stream().anyMatch(i -> i.getEtat().equals(etatAContaminer)) && individusZone.stream().anyMatch(i -> i.getEtat().equals("contamine"))) {
+					for (Individu individu : individusZone) {
+						for (int j = 0; j < laZone.getNbContamines() && individu.getEtat().equals(etatAContaminer); j++) {
 							if (new Random().nextInt((int) (1/tauxContamination)) == 0) {
 								individu.setEtat("contamine");
-								System.out.println("contamination");
 							}
 						}
 					}

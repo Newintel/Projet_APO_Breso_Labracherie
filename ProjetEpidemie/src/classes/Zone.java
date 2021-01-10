@@ -6,13 +6,11 @@ public class Zone {
 
 	private int x, y;
 	private ArrayList<Case> mesCases;
-	private ArrayList<Individu> mesIndividus;
 	
 	public Zone(int y, int x) {
 		this.x = x;
 		this.y = y;
 		mesCases = new ArrayList<>();
-		mesIndividus = new ArrayList<>();
 	}
 	
 	public int getX() {
@@ -32,20 +30,16 @@ public class Zone {
 	}
 	
 	public ArrayList<Individu> getMesIndividus() {
-		return mesIndividus;
-	}
-	
-	public void addIndividus() {
+		ArrayList<Individu> individus = new ArrayList<>();
 		for (Case c : mesCases) {
-			for (Individu individu : c.getMesIndividus()) {
-				mesIndividus.add(individu);
-			}
+			individus.addAll(c.getMesIndividus());
 		}
+		return individus;
 	}
 	
 	public int getNbContamines() {
 		int n = 0;
-		for (Individu individu : mesIndividus) {
+		for (Individu individu : this.getMesIndividus()) {
 			if (individu.getEtat().equals("contamine")) {
 				n++;
 			}

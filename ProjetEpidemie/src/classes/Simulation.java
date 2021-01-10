@@ -46,7 +46,6 @@ public class Simulation {
 		for (int i = 0; i < jours; i++) {
 			// déplacer tous les individus
 			this.deplacer();
-			System.out.println("déplacement");
 			
 			// faire le test de retirement avant de faire le test de contamination
 			this.retirer();
@@ -70,7 +69,6 @@ public class Simulation {
 			
 			// déplacer tous les individus
 			this.deplacer();
-			System.out.println("déplacement");
 		}
 	}
 	
@@ -87,7 +85,6 @@ public class Simulation {
 			
 			// déplacer tous les individus
 			this.deplacer();
-			System.out.println("déplacement");
 			
 			// naissance
 			this.naissance();
@@ -156,7 +153,6 @@ public class Simulation {
 		Random rPlacement = new Random();
 		if (new Random().nextInt((int) (1/this.tauxNaissance)) == 0) {
 			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(leMonde.getLongueur()), rPlacement.nextInt(leMonde.getLargeur()))));
-			System.out.println("naissance");
 		}
 	}
 	
