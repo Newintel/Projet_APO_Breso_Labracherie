@@ -40,7 +40,7 @@ public class Zone {
 	public int getNbContamines() {
 		int n = 0;
 		for (Individu individu : this.getMesIndividus()) {
-			if (individu.getEtat().equals("contamine")) {
+			if (individu.getEtat().equals(Etat.INFECTE)) {
 				n++;
 			}
 		}

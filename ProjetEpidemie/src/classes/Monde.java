@@ -91,15 +91,15 @@ public class Monde {
 		return lesCases.get( (y*this.longueur) + x);
 	}
 	
-	public void contaminer(String etatAContaminer, double tauxContamination) {
+	public void contaminer(Etat etatAContaminer, double tauxContamination) {
 		for (Zone laZone : lesZones) {
 			ArrayList<Individu> individusZone = laZone.getMesIndividus();
 			if (individusZone.size() > 1) {
-				if (individusZone.stream().anyMatch(i -> i.getEtat().equals(etatAContaminer)) && individusZone.stream().anyMatch(i -> i.getEtat().equals("contamine"))) {
+				if (individusZone.stream().anyMatch(i -> i.getEtat().equals(etatAContaminer)) && individusZone.stream().anyMatch(i -> i.getEtat().equals(Etat.INFECTE))) {
 					for (Individu individu : individusZone) {
 						for (int j = 0; j < laZone.getNbContamines() && individu.getEtat().equals(etatAContaminer); j++) {
 							if (new Random().nextInt((int) (1/tauxContamination)) == 0) {
-								individu.setEtat("contamine");
+								individu.setEtat(Etat.INFECTE);
 							}
 						}
 					}

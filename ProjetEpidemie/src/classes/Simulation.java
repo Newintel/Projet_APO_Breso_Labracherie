@@ -30,11 +30,11 @@ public class Simulation {
 		
 		Random rPlacement = new Random();
 		for (int i = 0; i < s0; i++) {
-			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
+			lesIndividus.add(new Individu(Etat.SAIN, leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
 		for (int i = 0; i < i0; i++) {
-			lesIndividus.add(new Individu("contamine", leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
+			lesIndividus.add(new Individu(Etat.INFECTE, leMonde.getCase(rPlacement.nextInt(longueur), rPlacement.nextInt(largeur))));
 		}
 		
 		leMonde.creationZones();
@@ -45,15 +45,14 @@ public class Simulation {
 	
 	public void SIR() {
 		for (int i = 0; i < jours; i++) {
-			// déplacer tous les individus
-			this.deplacer();
-			
 			// faire le test de retirement avant de faire le test de contamination
 			this.retirer();
 			
 			// faire le test de contamination
-			leMonde.contaminer("sain", this.tauxContamination);
+			leMonde.contaminer(Etat.SAIN, this.tauxContamination);
 			
+			// déplacer tous les individus
+			this.deplacer();
 		}
 	}
 	
@@ -63,7 +62,7 @@ public class Simulation {
 			this.retirer();
 			
 			// faire le test de contamination
-			leMonde.contaminer("expose", this.tauxContamination);
+			leMonde.contaminer(Etat.EXPOSE, this.tauxContamination);
 			
 			// passer les individus sains à exposés
 			this.exposer();
@@ -79,7 +78,7 @@ public class Simulation {
 			this.retirer();
 			
 			// faire le test de contamination
-			leMonde.contaminer("expose", this.tauxContamination);
+			leMonde.contaminer(Etat.EXPOSE, this.tauxContamination);
 			
 			// passer les individus sains à exposés
 			this.exposer();
@@ -139,16 +138,16 @@ public class Simulation {
 	
 	public void retirer() {
 		for (Individu individu : lesIndividus) {
-			if (individu.getEtat().equals("contamine") && new Random().nextInt((int) (1/this.tauxRetirement)) == 0) {
-				individu.setEtat("retire");
+			if (individu.getEtat().equals(Etat.INFECTE) && new Random().nextInt((int) (1/this.tauxRetirement)) == 0) {
+				individu.setEtat(Etat.RETIRE);
 			}
 		}
 	}
 	
 	public void exposer() {
 		for (Individu individu : lesIndividus) {
-			if (individu.getEtat().equals("sain") && new Random().nextInt((int) (1/this.tauxExposition)) == 0) {
-				individu.setEtat("expose");
+			if (individu.getEtat().equals(Etat.SAIN) && new Random().nextInt((int) (1/this.tauxExposition)) == 0) {
+				individu.setEtat(Etat.EXPOSE);
 			}
 		}
 	}
@@ -156,7 +155,7 @@ public class Simulation {
 	public void naissance() {
 		/*Random rPlacement = new Random();
 		if (new Random().nextInt((int) (1/this.tauxNaissance)) == 0) {
-			lesIndividus.add(new Individu("sain", leMonde.getCase(rPlacement.nextInt(leMonde.getLongueur()), rPlacement.nextInt(leMonde.getLargeur()))));
+			lesIndividus.add(new Individu(Etat.Sain, leMonde.getCase(rPlacement.nextInt(leMonde.getLongueur()), rPlacement.nextInt(leMonde.getLargeur()))));
 		}*/
 	}
 	
@@ -179,7 +178,7 @@ public class Simulation {
 		return s;
 	}
 	
-	public int getNbIndividus(String etat) {
+	public int getNbIndividus(Etat etat) {
 		int n = 0;
 		for (Individu individu : lesIndividus) {
 			if (individu.getEtat().equals(etat)) {
