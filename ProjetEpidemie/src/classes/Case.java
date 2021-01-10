@@ -36,7 +36,7 @@ public class Case {
 	public int getNbContamines() {
 		int n = 0;
 		for (Individu individu : mesIndividus) {
-			if (individu.getEtat().equals("contamine")) {
+			if (individu.getEtat().equals(Etat.SAIN)) {
 				n++;
 			}
 		}

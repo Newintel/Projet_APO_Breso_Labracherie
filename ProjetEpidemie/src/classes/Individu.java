@@ -4,14 +4,15 @@ public class Individu {
 
 	private Case maCase;
 	private boolean deplacementAutorise;
+	private boolean masque = false;
 	
-	private String etat;
+	private Etat etat;
 	
-	public Individu(String etat, Case caseDepart) {
+	public Individu(Etat etat, Case caseDepart) {
 		this(etat, caseDepart, true);
 	}
 	
-	public Individu(String etat, Case caseDepart, boolean dA) {
+	public Individu(Etat etat, Case caseDepart, boolean dA) {
 		this.etat = etat;
 		this.maCase = caseDepart;
 		this.maCase.addIndividu(this);
@@ -22,8 +23,12 @@ public class Individu {
 		return maCase;
 	}
 	
-	public boolean isDeplacementAutorise() {
+	public boolean hasDeplacementAutorise() {
 		return deplacementAutorise;
+	}
+	
+	public void setDeplacement(boolean deplacement) {
+		this.deplacementAutorise = deplacement;
 	}
 	
 	public void seDeplacer(Case destination) {
@@ -32,11 +37,19 @@ public class Individu {
 		maCase.addIndividu(this);
 	}
 	
-	public void setEtat(String etat) {
+	public void setEtat(Etat etat) {
 		this.etat = etat;
 	}
 	
-	public String getEtat() {
+	public Etat getEtat() {
 		return etat;
+	}
+	
+	public void setMasque() {
+		masque = true;
+	}
+	
+	public boolean hasMasque() {
+		return masque;
 	}
 }
