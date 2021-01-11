@@ -8,7 +8,7 @@ public class SimulationEpidemie {
 		Scanner s = new Scanner(System.in);
 		int s0 = 0, i0 = 0;
 		int nbJours = 0;
-		double tauxC = -1, tauxR = -1, tauxE = -1, tauxM = -1;
+		int tauxC = -1, tauxR = -1, tauxE = -1, tauxM = -1;
 		int propN = -1, propM = -1, propV = -1;
 		int longueur = 0, largeur = 0;
 		boolean spatialisation = false, politiquesActives = false, confinement = false, quarantaine = false;
@@ -36,7 +36,7 @@ public class SimulationEpidemie {
 					System.out.println("Le nombre doit être supérieur à 0.");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Veuillez indiquer un nombre.");
+				System.out.println("Veuillez indiquer un nombre positif.");
 			}
 		} while (wrong);
 		
@@ -52,7 +52,7 @@ public class SimulationEpidemie {
 					System.out.println("Le nombre doit être supérieur à 0.");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Veuillez indiquer un nombre.");
+				System.out.println("Veuillez indiquer un nombre positif.");
 			}
 		} while (wrong);
 		
@@ -69,41 +69,41 @@ public class SimulationEpidemie {
 					System.out.println("Le nombre doit être positif.");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Veuillez indiquer un nombre.");
+				System.out.println("Veuillez indiquer un nombre positif.");
 			}			
 		} while (wrong);
 		
 		String tauxContamination;
 		wrong = true;
 		do {
-			System.out.println("Veuillez indiquer le taux de contamination, compris entre 0 et 1 :");
+			System.out.println("Veuillez indiquer le taux de contamination, compris entre 0 et 100 :");
 			tauxContamination = s.nextLine();
 			try {
-				tauxC = Double.valueOf(tauxContamination);
-				if (tauxC >= 0 && tauxC <= 1) {
+				tauxC = Integer.valueOf(tauxContamination);
+				if (tauxC >= 0 && tauxC <= 100) {
 					wrong = false;
 				} else {
-					System.out.println("Le nombre doit être compris entre 0 et 1.");
+					System.out.println("Le nombre doit être compris entre 0 et 100.");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Veuillez indiquer un nombre.");
+				System.out.println("Veuillez indiquer un nombre entre 0 et 100.");
 			}			
 		} while (wrong);
 		
 		String tauxRetirement;
 		wrong = true;
 		do {
-			System.out.println("Veuillez indiquer le taux de désinféction (guérison ou décès), compris entre 0 et 1 :");
+			System.out.println("Veuillez indiquer le taux de désinféction (passage d'un individu infecté vers retiré), compris entre 0 et 100 :");
 			tauxRetirement = s.nextLine();
 			try {
-				tauxR = Double.valueOf(tauxRetirement);
-				if (tauxR >= 0 && tauxR <= 1) {
+				tauxR = Integer.valueOf(tauxRetirement);
+				if (tauxR >= 0 && tauxR <= 100) {
 					wrong = false;
 				} else {
-					System.out.println("Le nombre doit être compris entre 0 et 1.");
+					System.out.println("Le nombre doit être compris entre 0 et 100.");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Veuillez indiquer un nombre.");
+				System.out.println("Veuillez indiquer un nombre entre 0 et 100.");
 			}			
 		} while (wrong);
 		
@@ -111,17 +111,17 @@ public class SimulationEpidemie {
 			String tauxExposition;
 			wrong = true;
 			do {
-				System.out.println("Veuillez indiquer le taux d'exposition des individus, compris entre 0 et 1 :");
+				System.out.println("Veuillez indiquer le taux d'exposition des individus, compris entre 0 et 100 :");
 				tauxExposition = s.nextLine();
 				try {
-					tauxE = Double.valueOf(tauxExposition);
-					if (tauxE >= 0 && tauxE <= 1) {
+					tauxE = Integer.valueOf(tauxExposition);
+					if (tauxE >= 0 && tauxE <= 100) {
 						wrong = false;
 					} else {
-						System.out.println("Le nombre doit être compris entre 0 et 1.");
+						System.out.println("Le nombre doit être compris entre 0 et 100.");
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Veuillez indiquer un nombre.");
+					System.out.println("Veuillez indiquer un nombre entre 0 et 100.");
 				}			
 			} while (wrong);
 		}
@@ -140,24 +140,24 @@ public class SimulationEpidemie {
 						System.out.println("Le nombre doit être compris entre 0 et 100.");
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Veuillez indiquer un nombre.");
+					System.out.println("Veuillez indiquer un nombre entre 0 et 100.");
 				}			
 			} while (wrong);
 			
 			String tauxMortalite;
 			wrong = true;
 			do {
-				System.out.println("Veuillez indiquer le taux de mortalité naturel, compris entre 0 et 1 :");
+				System.out.println("Veuillez indiquer le taux de mortalité naturel, compris entre 0 et 100 :");
 				tauxMortalite = s.nextLine();
 				try {
-					tauxM = Double.valueOf(tauxMortalite);
-					if (tauxM >= 0 && tauxM <= 1) {
+					tauxM = Integer.valueOf(tauxMortalite);
+					if (tauxM >= 0 && tauxM <= 100) {
 						wrong = false;
 					} else {
-						System.out.println("Le nombre doit être compris entre 0 et 1.");
+						System.out.println("Le nombre doit être compris entre 0 et 100.");
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Veuillez indiquer un nombre.");
+					System.out.println("Veuillez indiquer un nombre entre 0 et 100.");
 				}			
 			} while (wrong);
 		}
@@ -175,7 +175,7 @@ public class SimulationEpidemie {
 					System.out.println("Le nombre doit être positif.");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Veuillez indiquer un nombre.");
+				System.out.println("Veuillez indiquer un nombre positif.");
 			}			
 		} while (wrong);
 		
@@ -191,7 +191,7 @@ public class SimulationEpidemie {
 					System.out.println("Le nombre doit être positif.");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Veuillez indiquer un nombre.");
+				System.out.println("Veuillez indiquer un nombre positif.");
 			}			
 		} while (wrong);
 		
@@ -251,7 +251,7 @@ public class SimulationEpidemie {
 						System.out.println("Le nombre doit être compris entre 0 et 100.");
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Veuillez indiquer un nombre.");
+					System.out.println("Veuillez indiquer un nombre entre 0 et 100.");
 				}			
 			} while (wrong);
 			
@@ -282,7 +282,7 @@ public class SimulationEpidemie {
 						System.out.println("Le nombre doit être compris entre 0 et 100.");
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Veuillez indiquer un nombre.");
+					System.out.println("Veuillez indiquer un nombre entre 0 et 100.");
 				}			
 			} while (wrong);
 		}

@@ -25,11 +25,11 @@ public class Simulation {
 		this.i0 = i0;
 		this.p0 = s0-i0;
 		this.s0 = s0;
-		this.tauxContamination = tauxC;
-		this.tauxRetirement = tauxR;
-		this.tauxExposition = tauxE;
+		this.tauxContamination = tauxC/100;
+		this.tauxRetirement = tauxR/100;
+		this.tauxExposition = tauxE/100;
 		this.propNaissance = propN;
-		this.tauxMort = tauxM;
+		this.tauxMort = tauxM/100;
 		this.jours = jours;
 		this.spatialisation = spatialisation;
 		this.politiquesActives = politiquesActives;
