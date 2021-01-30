@@ -326,21 +326,6 @@ public class Simulation {
 		return nbVaccine;
 	}
 	
-	@Override
-	public String toString() {
-		String s = "";
-		int i = 0;
-		for (Case c : leMonde.getLesCases()) {
-			if (i%leMonde.getLongueur() == 0) {
-				s += "\n---------------------------------------------------------------------------------\n| ";
-			}
-			s += c.getMesIndividus().size() + " | ";
-			i++;
-		}
-		s += "\n---------------------------------------------------------------------------------\n";
-		return s;
-	}
-	
 	private int getNbIndividus(Etat etat) {
 		int n = 0;
 		for (Individu individu : lesIndividus) {
