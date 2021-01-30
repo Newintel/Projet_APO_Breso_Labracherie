@@ -88,14 +88,24 @@ public class Monde {
 	public int contaminer(Etat etatAContaminer, double tauxContamination) {
 		int nbInfectes = 0;
 		for (Case laCase : lesCases) {
+			
+			// On récupère les individus de chaque case
 			ArrayList<Individu> individusZone = laCase.getMesIndividus();
+			
+			// Si il y a au moins 2 individus sur la case => contamination possible
 			if (individusZone.size() > 1) {
+				
+				// On regarde si parmis les individus, au moins 1 est contaminé, et au moins 1 est contaminable
 				if (individusZone.stream().anyMatch(i -> i.getEtat().equals(etatAContaminer)) && individusZone.stream().anyMatch(i -> i.getEtat().equals(Etat.INFECTE))) {
+				
 					for (Individu individu : individusZone) {
+						// Puis si l'individu est contaminable, on fait le test de contamination pour chaque personne contaminé
 						for (int j = 0; j < laCase.getNbContamines() && individu.getEtat().equals(etatAContaminer); j++) {
+							// S'il porte un masque, la contamination est réduite
 							if (individu.hasMasque()) {
 								tauxContamination /= 4;
 							}
+							
 							if (new Random().nextInt((int) (1/tauxContamination)) == 0) {
 								individu.setEtat(Etat.INFECTE);
 								nbInfectes++;
