@@ -71,7 +71,7 @@ public class Simulation {
 		
 	}
 	
-	public void attribuerMasque() {
+	private void attribuerMasque() {
 		Collections.shuffle(lesIndividus);
 		int nbMasques = (int) this.propMasques*lesIndividus.size();
 		for (int i = 0; nbMasques > 0 && i < lesIndividus.size(); i++) {
@@ -203,7 +203,7 @@ public class Simulation {
 		System.out.println("Jour " + jours + ":\n\tSains : " + resumeSains[jours] + "\n\tExposes : " + resumeExposes[jours] + "\n\tInfectes : " + resumeInfectes[jours] + "\n\tRetires : " + resumeRetires[jours] + "\n\tMorts : " + resumeMorts[jours]);
 	}
 	
-	public void deplacer() {
+	private void deplacer() {
 		boolean deplacementImpossible = true;
 		for (Individu individu : lesIndividus) {
 			int xIndividu = individu.getMaCase().getX();
@@ -249,7 +249,7 @@ public class Simulation {
 		}
 	}
 	
-	public int contaminer(Etat etat) {
+	private int contaminer(Etat etat) {
 		if (this.spatialisation) {
 			return leMonde.contaminer(etat, this.tauxContamination);
 		} else {
@@ -272,7 +272,7 @@ public class Simulation {
 		
 	}
 	
-	public int retirer() {
+	private int retirer() {
 		int nbRetire = 0;
 		for (Individu individu : lesIndividus) {
 			if (individu.getEtat().equals(Etat.INFECTE) && new Random().nextInt((int) (1/this.tauxRetirement)) == 0) {
@@ -283,7 +283,7 @@ public class Simulation {
 		return nbRetire;
 	}
 	
-	public int exposer() {
+	private int exposer() {
 		int nbExpose = 0;
 		for (Individu individu : lesIndividus) {
 			if (individu.getEtat().equals(Etat.SAIN) && new Random().nextInt((int) (1/this.tauxExposition)) == 0) {
@@ -294,7 +294,7 @@ public class Simulation {
 		return nbExpose;
 	}
 	
-	public int naissance() {
+	private int naissance() {
 		int nbNaissance = 0;
 		while(nbNaissance < ((int) this.propNaissance*lesIndividus.size())) {
 			Random rPlacement = new Random();
@@ -304,7 +304,7 @@ public class Simulation {
 		return nbNaissance;
 	}
 	
-	public ArrayList<Individu> mortNaturelle() {
+	private ArrayList<Individu> mortNaturelle() {
 		ArrayList<Individu> individusMorts = new ArrayList<>();
 		for (Individu individu : lesIndividus) {
 			if (new Random().nextInt((int) (1/this.tauxMort)) == 0) {
@@ -314,7 +314,7 @@ public class Simulation {
 		return individusMorts;
 	}
 	
-	public int vacciner() {
+	private int vacciner() {
 		int nbVaccine = 0;
 		for (int i = 0; i < lesIndividus.size() && nbVaccine < ((int) this.propVaccination*lesIndividus.size()); i++) {
 			Individu individu = lesIndividus.get(i);
@@ -341,7 +341,7 @@ public class Simulation {
 		return s;
 	}
 	
-	public int getNbIndividus(Etat etat) {
+	private int getNbIndividus(Etat etat) {
 		int n = 0;
 		for (Individu individu : lesIndividus) {
 			if (individu.getEtat().equals(etat)) {
