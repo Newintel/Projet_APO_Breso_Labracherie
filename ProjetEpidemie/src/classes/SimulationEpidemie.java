@@ -2,6 +2,11 @@ package classes;
 
 import java.util.Scanner;
 
+/**
+ * 
+ * SimulationEpidemie est la classe qui intéragit avec l'utilisateur
+ *
+ */
 public class SimulationEpidemie {
 
 	public static void main(String[] args) {

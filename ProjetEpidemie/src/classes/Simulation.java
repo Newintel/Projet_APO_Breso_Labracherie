@@ -1,10 +1,14 @@
 package classes;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * 
+ * Simulation est la classe qui effectuera toutes les actions en lien avec l'épidémie
+ *
+ */
 public class Simulation {
 
 	private int s0, i0, p0, jours;
@@ -21,6 +25,42 @@ public class Simulation {
 	// attributs pour les résultats finaux
 	private int[] resumeSains, resumeExposes, resumeInfectes, resumeRetires, resumeMorts;
 	
+	/**
+	 * Constructeur de la simulation qui initialise tous les paramètres
+	 * 
+	 * @param s0
+	 * 		Population initiale
+	 * @param i0
+	 * 		Nombre de contaminés initial
+	 * @param tauxC
+	 * 		Taux de contamination
+	 * @param tauxR
+	 * 		Taux de retirement
+	 * @param tauxE
+	 * 		Taux d'exposition
+	 * @param propN
+	 * 		Proportion de nouveaux individus
+	 * @param tauxM
+	 * 		Taux de mortalité
+	 * @param jours
+	 * 		Nombre de jours de la simulation
+	 * @param spatialisation
+	 * 		Booléen qui indique si la spatialisation est active
+	 * @param politiquesActives
+	 * 		Booléen qui indique si les politiques publiques sont actives
+	 * @param confinement
+	 * 		Booléen qui indique si le confinement est actif
+	 * @param propMasques
+	 * 		Proportion de personnes portant le masque
+	 * @param quarantaine
+	 * 		Booléen qui indique si la quarantaine est active
+	 * @param propV
+	 * 		Proportion de personnes pouvant être vaccinées
+	 * @param longueur
+	 * 		Longueur du monde
+	 * @param largeur
+	 * 		Largeur du monde
+	 */
 	public Simulation(int s0, int i0, double tauxC, double tauxR, double tauxE, double propN, double tauxM, int jours, boolean spatialisation, boolean politiquesActives, boolean confinement, double propMasques, boolean quarantaine, double propV, int longueur, int largeur) {
 		this.i0 = i0;
 		this.p0 = s0-i0;
@@ -71,6 +111,9 @@ public class Simulation {
 		
 	}
 	
+	/**
+	 * Applique le boolean masque à un certain nombre d'individus
+	 */
 	private void attribuerMasque() {
 		Collections.shuffle(lesIndividus);
 		int nbMasques = (int) this.propMasques*lesIndividus.size();
@@ -83,6 +126,9 @@ public class Simulation {
 		}
 	}
 	
+	/**
+	 * Effectue la simulation de type SIR
+	 */
 	public void SIR() {
 		for (int i = 0; i < jours; i++) {
 			
@@ -111,6 +157,9 @@ public class Simulation {
 		System.out.println("Jour " + jours + ":\n\tSains : " + resumeSains[jours] + "\n\tInfectes : " + resumeInfectes[jours] + "\n\tRetires : " + resumeRetires[jours]);
 	}
 	
+	/**
+	 * Effectue la simulation de type SEIR 
+	 */
 	public void SEIR() {
 		for (int i = 0; i < jours; i++) {
 			
@@ -144,6 +193,9 @@ public class Simulation {
 		System.out.println("Jour " + jours + ":\n\tSains : " + resumeSains[jours] + "\n\tExposes : " + resumeExposes[jours] + "\n\tInfectes : " + resumeInfectes[jours] + "\n\tRetires : " + resumeRetires[jours]);
 	}
 	
+	/**
+	 * Effectue la simulation de type SEIR et avec évolution de population
+	 */
 	public void SEIRN() {
 		for (int i = 0; i < jours; i++) {
 			
@@ -203,6 +255,9 @@ public class Simulation {
 		System.out.println("Jour " + jours + ":\n\tSains : " + resumeSains[jours] + "\n\tExposes : " + resumeExposes[jours] + "\n\tInfectes : " + resumeInfectes[jours] + "\n\tRetires : " + resumeRetires[jours] + "\n\tMorts : " + resumeMorts[jours]);
 	}
 	
+	/**
+	 * Deplace aléatoirement d'une case chaque individu dans la simulation
+	 */
 	private void deplacer() {
 		boolean deplacementImpossible = true;
 		for (Individu individu : lesIndividus) {
@@ -249,6 +304,16 @@ public class Simulation {
 		}
 	}
 	
+	/**
+	 * Contamine les individus d'état "étatAContaminer" par rapport au taux de contamination
+	 * Si la spatialisation est active, contamine par rapport aux cases,
+	 * sinon contamine peu importe l'endroit des individus
+	 * 
+	 * @param etat
+	 * 		Etat qui peut être contaminé
+	 * @return un entier correspondant au nombre de personnes contaminées
+	 * @see Monde#contaminer(Etat, double)
+	 */
 	private int contaminer(Etat etat) {
 		if (this.spatialisation) {
 			return leMonde.contaminer(etat, this.tauxContamination);
@@ -272,6 +337,11 @@ public class Simulation {
 		
 	}
 	
+	/**
+	 * Passe un certain nombre d'individu de l'état INFECTE à l'état RETIRE en fonction du taux de retirement "tauxRetirement"
+	 * 
+	 * @return un entier correspondant au nombre de personnes retirées suite au test
+	 */
 	private int retirer() {
 		int nbRetire = 0;
 		for (Individu individu : lesIndividus) {
@@ -283,6 +353,11 @@ public class Simulation {
 		return nbRetire;
 	}
 	
+	/**
+	 * Passe un certain nombre d'individu de l'état SAIN à l'état EXPOSE en fonction du taux d'exposition "tauxExposition"
+	 * 
+	 * @return un entier correspondant au nombre de personnes exposées suite au test
+	 */
 	private int exposer() {
 		int nbExpose = 0;
 		for (Individu individu : lesIndividus) {
@@ -294,6 +369,11 @@ public class Simulation {
 		return nbExpose;
 	}
 	
+	/**
+	 * Augmente le nombre d'individus en fonction de la proportion de naissance
+	 * 
+	 * @return un entier correspondant au nombre de nouvelles personnes
+	 */
 	private int naissance() {
 		int nbNaissance = 0;
 		while(nbNaissance < ((int) this.propNaissance*lesIndividus.size())) {
@@ -304,6 +384,11 @@ public class Simulation {
 		return nbNaissance;
 	}
 	
+	/**
+	 * Effectue le test de mort naturelle par rapport au taux de mort naturelle "tauxMort"
+	 * 
+	 * @return une liste des personnes décedées
+	 */
 	private ArrayList<Individu> mortNaturelle() {
 		ArrayList<Individu> individusMorts = new ArrayList<>();
 		for (Individu individu : lesIndividus) {
@@ -314,6 +399,11 @@ public class Simulation {
 		return individusMorts;
 	}
 	
+	/**
+	 * Effectue un test de vaccin sur un certain nombre d'individus
+	 * 
+	 * @return un entier correspondant au nombre de personnes vaccinées
+	 */
 	private int vacciner() {
 		int nbVaccine = 0;
 		for (int i = 0; i < lesIndividus.size() && nbVaccine < ((int) this.propVaccination*lesIndividus.size()); i++) {
@@ -326,6 +416,14 @@ public class Simulation {
 		return nbVaccine;
 	}
 	
+	/**
+	 * Retourne le nombre d'individus par rapport à un Etat donné
+	 * 
+	 * @param etat
+	 * 		Etat dont on cherche le nombre
+	 * @return un entier correspondant au nombre d'individus de l'état donnée
+	 * @see Etat
+	 */
 	private int getNbIndividus(Etat etat) {
 		int n = 0;
 		for (Individu individu : lesIndividus) {
