@@ -451,6 +451,13 @@ public class Simulation {
 		return n;
 	}
 
+	/**
+	 * Créer un fichier CSV pour analyser les données de la simulation
+	 * 
+	 * @param categorie
+	 * 		Type de simulation effectué
+	 * @throws IOException
+	 */
 	private void toCSV(String categorie) throws IOException {
 		
 		char separateur = ',';
