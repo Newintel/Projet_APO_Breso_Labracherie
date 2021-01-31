@@ -3,10 +3,11 @@ package classes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.io.*;
 
 /**
  * 
- * Simulation est la classe qui effectuera toutes les actions en lien avec l'épidémie
+ * Simulation est la classe qui effectuera toutes les actions en lien avec l'ï¿½pidï¿½mie
  *
  */
 public class Simulation {
@@ -22,16 +23,16 @@ public class Simulation {
 	private int deplacementP = 0;
 	private double propMasques;
 	
-	// attributs pour les résultats finaux
+	// attributs pour les rï¿½sultats finaux
 	private int[] resumeSains, resumeExposes, resumeInfectes, resumeRetires, resumeMorts;
 	
 	/**
-	 * Constructeur de la simulation qui initialise tous les paramètres
+	 * Constructeur de la simulation qui initialise tous les paramï¿½tres
 	 * 
 	 * @param s0
 	 * 		Population initiale
 	 * @param i0
-	 * 		Nombre de contaminés initial
+	 * 		Nombre de contaminï¿½s initial
 	 * @param tauxC
 	 * 		Taux de contamination
 	 * @param tauxR
@@ -41,21 +42,21 @@ public class Simulation {
 	 * @param propN
 	 * 		Proportion de nouveaux individus
 	 * @param tauxM
-	 * 		Taux de mortalité
+	 * 		Taux de mortalitï¿½
 	 * @param jours
 	 * 		Nombre de jours de la simulation
 	 * @param spatialisation
-	 * 		Booléen qui indique si la spatialisation est active
+	 * 		Boolï¿½en qui indique si la spatialisation est active
 	 * @param politiquesActives
-	 * 		Booléen qui indique si les politiques publiques sont actives
+	 * 		Boolï¿½en qui indique si les politiques publiques sont actives
 	 * @param confinement
-	 * 		Booléen qui indique si le confinement est actif
+	 * 		Boolï¿½en qui indique si le confinement est actif
 	 * @param propMasques
 	 * 		Proportion de personnes portant le masque
 	 * @param quarantaine
-	 * 		Booléen qui indique si la quarantaine est active
+	 * 		Boolï¿½en qui indique si la quarantaine est active
 	 * @param propV
-	 * 		Proportion de personnes pouvant être vaccinées
+	 * 		Proportion de personnes pouvant ï¿½tre vaccinï¿½es
 	 * @param longueur
 	 * 		Longueur du monde
 	 * @param largeur
@@ -93,7 +94,7 @@ public class Simulation {
 		this.attribuerMasque();
 		
 		if (confinement) {
-			// En augmentant cette valeur, les individus ont moins de chance de se déplacer
+			// En augmentant cette valeur, les individus ont moins de chance de se dï¿½placer
 			this.deplacementP = 16;
 		}
 		
@@ -112,7 +113,7 @@ public class Simulation {
 	}
 	
 	/**
-	 * Applique le boolean masque à un certain nombre d'individus
+	 * Applique le boolean masque ï¿½ un certain nombre d'individus
 	 */
 	private void attribuerMasque() {
 		Collections.shuffle(lesIndividus);
@@ -147,7 +148,7 @@ public class Simulation {
 				nbRetires += this.vacciner();
 			}
 			
-			// déplacer tous les individus
+			// dï¿½placer tous les individus
 			this.deplacer();
 			
 			resumeSains[i+1] = resumeSains[i] - nbInfectes;
@@ -155,6 +156,12 @@ public class Simulation {
 			resumeRetires[i+1] = resumeRetires[i] + nbRetires;
 		}
 		System.out.println("Jour " + jours + ":\n\tSains : " + resumeSains[jours] + "\n\tInfectes : " + resumeInfectes[jours] + "\n\tRetires : " + resumeRetires[jours]);
+		try {
+			this.toCSV("SIR");
+		} catch (IOException e) {
+			System.out.println("Erreur lors de l'Ã©criture dans le fichier.");
+		}
+		
 	}
 	
 	/**
@@ -178,10 +185,10 @@ public class Simulation {
 				nbRetires += this.vacciner();
 			}
 			
-			// passer les individus sains à exposés
+			// passer les individus sains ï¿½ exposï¿½s
 			int nbExposes = this.exposer();
 			
-			// déplacer tous les individus
+			// dï¿½placer tous les individus
 			this.deplacer();
 			
 			resumeSains[i+1] = resumeSains[i] - nbExposes;
@@ -191,10 +198,15 @@ public class Simulation {
 		}
 		
 		System.out.println("Jour " + jours + ":\n\tSains : " + resumeSains[jours] + "\n\tExposes : " + resumeExposes[jours] + "\n\tInfectes : " + resumeInfectes[jours] + "\n\tRetires : " + resumeRetires[jours]);
+		try {
+			this.toCSV("SEIR");
+		} catch (IOException e) {
+			System.out.println("Erreur lors de l'Ã©criture dans le fichier.");
+		}
 	}
 	
 	/**
-	 * Effectue la simulation de type SEIR et avec évolution de population
+	 * Effectue la simulation de type SEIR et avec ï¿½volution de population
 	 */
 	public void SEIRN() {
 		for (int i = 0; i < jours; i++) {
@@ -214,10 +226,10 @@ public class Simulation {
 				nbRetires += this.vacciner();
 			}
 			
-			// passer les individus sains à exposés
+			// passer les individus sains ï¿½ exposï¿½s
 			int nbExposes = this.exposer();
 			
-			// déplacer tous les individus
+			// dï¿½placer tous les individus
 			this.deplacer();
 			
 			// mort natuelle
@@ -253,10 +265,15 @@ public class Simulation {
 		}
 		
 		System.out.println("Jour " + jours + ":\n\tSains : " + resumeSains[jours] + "\n\tExposes : " + resumeExposes[jours] + "\n\tInfectes : " + resumeInfectes[jours] + "\n\tRetires : " + resumeRetires[jours] + "\n\tMorts : " + resumeMorts[jours]);
+		try {
+			this.toCSV("SEIRN");
+		} catch (IOException e) {
+			System.out.println("Erreur lors de l'Ã©criture dans le fichier.");
+		}
 	}
 	
 	/**
-	 * Deplace aléatoirement d'une case chaque individu dans la simulation
+	 * Deplace alï¿½atoirement d'une case chaque individu dans la simulation
 	 */
 	private void deplacer() {
 		boolean deplacementImpossible = true;
@@ -295,7 +312,7 @@ public class Simulation {
 						}
 						break;
 					default:
-						// pas de déplacement
+						// pas de dï¿½placement
 						deplacementImpossible = false;
 						break;
 				}
@@ -305,13 +322,13 @@ public class Simulation {
 	}
 	
 	/**
-	 * Contamine les individus d'état "étatAContaminer" par rapport au taux de contamination
+	 * Contamine les individus d'ï¿½tat "ï¿½tatAContaminer" par rapport au taux de contamination
 	 * Si la spatialisation est active, contamine par rapport aux cases,
 	 * sinon contamine peu importe l'endroit des individus
 	 * 
 	 * @param etat
-	 * 		Etat qui peut être contaminé
-	 * @return un entier correspondant au nombre de personnes contaminées
+	 * 		Etat qui peut ï¿½tre contaminï¿½
+	 * @return un entier correspondant au nombre de personnes contaminï¿½es
 	 * @see Monde#contaminer(Etat, double)
 	 */
 	private int contaminer(Etat etat) {
@@ -338,9 +355,9 @@ public class Simulation {
 	}
 	
 	/**
-	 * Passe un certain nombre d'individu de l'état INFECTE à l'état RETIRE en fonction du taux de retirement "tauxRetirement"
+	 * Passe un certain nombre d'individu de l'ï¿½tat INFECTE ï¿½ l'ï¿½tat RETIRE en fonction du taux de retirement "tauxRetirement"
 	 * 
-	 * @return un entier correspondant au nombre de personnes retirées suite au test
+	 * @return un entier correspondant au nombre de personnes retirï¿½es suite au test
 	 */
 	private int retirer() {
 		int nbRetire = 0;
@@ -354,9 +371,9 @@ public class Simulation {
 	}
 	
 	/**
-	 * Passe un certain nombre d'individu de l'état SAIN à l'état EXPOSE en fonction du taux d'exposition "tauxExposition"
+	 * Passe un certain nombre d'individu de l'ï¿½tat SAIN ï¿½ l'ï¿½tat EXPOSE en fonction du taux d'exposition "tauxExposition"
 	 * 
-	 * @return un entier correspondant au nombre de personnes exposées suite au test
+	 * @return un entier correspondant au nombre de personnes exposï¿½es suite au test
 	 */
 	private int exposer() {
 		int nbExpose = 0;
@@ -387,7 +404,7 @@ public class Simulation {
 	/**
 	 * Effectue le test de mort naturelle par rapport au taux de mort naturelle "tauxMort"
 	 * 
-	 * @return une liste des personnes décedées
+	 * @return une liste des personnes dï¿½cedï¿½es
 	 */
 	private ArrayList<Individu> mortNaturelle() {
 		ArrayList<Individu> individusMorts = new ArrayList<>();
@@ -402,7 +419,7 @@ public class Simulation {
 	/**
 	 * Effectue un test de vaccin sur un certain nombre d'individus
 	 * 
-	 * @return un entier correspondant au nombre de personnes vaccinées
+	 * @return un entier correspondant au nombre de personnes vaccinï¿½es
 	 */
 	private int vacciner() {
 		int nbVaccine = 0;
@@ -417,11 +434,11 @@ public class Simulation {
 	}
 	
 	/**
-	 * Retourne le nombre d'individus par rapport à un Etat donné
+	 * Retourne le nombre d'individus par rapport ï¿½ un Etat donnï¿½
 	 * 
 	 * @param etat
 	 * 		Etat dont on cherche le nombre
-	 * @return un entier correspondant au nombre d'individus de l'état donnée
+	 * @return un entier correspondant au nombre d'individus de l'ï¿½tat donnï¿½e
 	 * @see Etat
 	 */
 	private int getNbIndividus(Etat etat) {
@@ -432,6 +449,68 @@ public class Simulation {
 			}
 		}
 		return n;
+	}
+
+	private void toCSV(String categorie) throws IOException {
+		
+		char separateur = ',';
+		char delimiteur = '\n';
+		String exposes = "";
+		String mort = "";
+		int[][] data = new int[][]{resumeSains, null, resumeInfectes, resumeRetires, null};
+
+		try {
+            File don = new File("../../donnees.csv");
+  
+            // CrÃ©er un nouveau fichier
+            // VÃ©rifier s'il n'existe pas
+            if (!don.createNewFile()){
+				don.delete();
+			}
+        }
+        catch (Exception e) {
+            System.err.println(e);
+        }
+
+		File d = new File("donnees.csv");
+
+		if (d.exists()){
+			d.delete();
+		}
+
+		try {
+			FileWriter donnees = new FileWriter("donnees.csv");
+
+			if (categorie != "SIR"){
+				exposes = " ExposÃ©s,";
+				data[1] = resumeExposes;
+			}
+
+			if (categorie == "SEIRN"){
+				data[4] = resumeMorts;
+				mort = ", Morts";
+			}
+
+			String header = "Jour, Sains," + exposes + " InfectÃ©s, RetirÃ©s" + mort + delimiteur;
+			donnees.append(header);
+			
+			for (int i = 0; i <= jours; i++){
+				String line = "";
+				line += Integer.toString(i);
+				for (int j = 0; j < 5; j++){
+					if (data[j] != null){
+						line += separateur + Integer.toString(data[j][i]);
+					}
+				}
+				line += delimiteur;
+				donnees.append(line);
+			}
+			donnees.close();
+			System.out.println("CSV");
+		} catch (IOException e) {
+			throw new IOException();
+		}
+	
 	}
 
 }

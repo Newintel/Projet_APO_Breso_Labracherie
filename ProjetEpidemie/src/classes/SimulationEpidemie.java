@@ -304,6 +304,7 @@ public class SimulationEpidemie {
 			simu.SEIRN();
 			break;
 		}
+		s.close();
 	}
 
 }
